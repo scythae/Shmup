@@ -1,0 +1,1 @@
+﻿public enum UnitSide {usNone, usPlayer, usEnemy, usBoth};
