@@ -19,13 +19,17 @@ public class Stage : MonoBehaviour {
 			return instance;
 		}
 			
-		GameObject stagePanel = (GameObject) Instantiate(Prefab.panel);
-		stagePanel.name = "panel_Stage";
-		stagePanel.AddComponent <EnemySpawning> ();
-		stagePanel.AddComponent <PlayerSpawning> ();
-		stagePanel.transform.SetParent (Design.gameController.transform, false);
+		GameObject stageInfo = (GameObject) Instantiate(Prefab.stageInfo);
+		stageInfo.transform.SetParent (Design.canvas.transform, false);
+		stageInfo.name = "panel_Stage";
+		stageInfo.AddComponent <EnemySpawning> ();
+		stageInfo.AddComponent <PlayerSpawning> ();
+		instance = stageInfo.AddComponent<Stage> ();
 
-		instance = stagePanel.AddComponent<Stage> ();
+		Score.text = GameObject.Find ("Score").GetComponent<Text> ();
+		HitPoints.text = GameObject.Find ("HitPoints").GetComponent<Text> ();
+		Score.Reset ();
+
 		return instance;
 	}
 
@@ -41,13 +45,8 @@ public class Stage : MonoBehaviour {
 	}
 
 	void OnDestroy () {
-		instance.DeactivateStageInfo();
 		Destroy (instance.gameObject);
 		DamageSource.DestroyAllMaintainedGameobjects ();
-	}
-
-	void Start () {
-		ActivateStageInfo ();
 	}
 
 	void Update () {
@@ -65,13 +64,5 @@ public class Stage : MonoBehaviour {
 		if (OnPause != null) {
 			OnPause.Invoke (fPaused);
 		}
-	}
-
-	void DeactivateStageInfo() {
-		Design.stageInfo.SetActive (false);
-	}
-
-	void ActivateStageInfo() {
-		Design.stageInfo.SetActive (true);
 	}
 }

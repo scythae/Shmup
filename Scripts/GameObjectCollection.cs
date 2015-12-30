@@ -5,10 +5,6 @@ using UnityEngine.UI;
 public class Design
 {
 	public static GameObject background = GameObject.Find("Background");
-	public static Text scoreText = GameObject.Find("Score").GetComponent<Text>();
-	public static Text hitPointsText = GameObject.Find("HitPoints").GetComponent<Text>();
-
-	public static GameObject stageInfo = GameObject.Find("StageInfo");
 	public static GameObject battlefield = GameObject.Find("Battlefield");
 
 	public static GameObject canvas = GameObject.Find("Canvas");
@@ -24,4 +20,5 @@ public class Prefab
 	public static GameObject panel = Resources.Load("pf_Panel") as GameObject;
 	public static GameObject gameWarning = Resources.Load("pf_GameWarning") as GameObject;
 	public static GameObject textItem = Resources.Load ("pf_TextItem") as GameObject;
+	public static GameObject stageInfo = Resources.Load ("pf_StageInfo") as GameObject;
 }

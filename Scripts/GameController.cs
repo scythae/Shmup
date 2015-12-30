@@ -8,19 +8,14 @@ public class GameController : MonoBehaviour {
 	private const float delay_gameOver = 1;
 	private const string warningText_startGame = "Start!";
 	private const string warningText_gameOver = "Game over.";
-	private string[] defaultMenuSet = new string[] {"New game", "Exit"};
-	private string[] pausedMenuSet = new string[] {"Resume", "New game", "Exit"};
 
 	private Stage stage;
 
 	void Start () {
-		Design.stageInfo.SetActive (false);
-		MainMenu.AddMenuAction ("New game", new UnityAction (NewGame));
-		MainMenu.AddMenuAction ("Exit", new UnityAction (ExitGame));
-		MainMenu.AddMenuAction ("Resume", new UnityAction (ResumeGame));
-
-		//MainMenu.DelayBeforeShowing = 0;
-		MainMenu.Show(defaultMenuSet);
+		MainMenu.AddMenuAction (MainMenu.itemCaption_NewGame, new UnityAction (NewGame));
+		MainMenu.AddMenuAction (MainMenu.itemCaption_ExitGame, new UnityAction (ExitGame));
+		MainMenu.AddMenuAction (MainMenu.itemCaption_ResumeGame, new UnityAction (ResumeGame));
+		MainMenu.Show(MainMenu.defaultMenuSet);
 	}
 
 	void NewGame () {
@@ -37,8 +32,7 @@ public class GameController : MonoBehaviour {
 
 	void ShowOrHidePauseMenu (bool paused) {
 		if (paused) {
-		//	MainMenu.DelayBeforeShowing = 0;
-			MainMenu.Show (pausedMenuSet);
+			MainMenu.Show (MainMenu.pausedMenuSet);
 		} else {
 			MainMenu.Hide ();
 		}
@@ -59,7 +53,6 @@ public class GameController : MonoBehaviour {
 	public void GameOver() {
 		Stage.Destroy ();
 		GameWarning.Show (warningText_gameOver, delay_gameOver);
-//		MainMenu.DelayBeforeShowing = delay_gameOver;
-		MainMenu.ShowAfterDelay(defaultMenuSet, delay_gameOver);
+		MainMenu.ShowAfterDelay(MainMenu.defaultMenuSet, delay_gameOver);
 	}
 }

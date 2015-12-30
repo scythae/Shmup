@@ -1,7 +1,10 @@
 ﻿using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 public static class Score {
 	private static int val = 0;
+	public static Text text;
 
 	public static int Get() {
 		return val;
@@ -13,7 +16,9 @@ public static class Score {
 	}
 
 	private static void ShowScore() {
-		Design.scoreText.text = "Score:" + Environment.NewLine + val.ToString ();
+		if (text != null) {
+			text.text = "Score:" + Environment.NewLine + val.ToString ();
+		}
 	}
 
 	public static void Reset() {
@@ -23,7 +28,32 @@ public static class Score {
 }
 
 public static class HitPoints {
+	public static Text text;
+
 	public static void Show(int hitPoints) {
-		Design.hitPointsText.text = "HitPoints:" + Environment.NewLine + hitPoints.ToString ();
+		if (text != null) {
+			text.text = "HitPoints:" + Environment.NewLine + hitPoints.ToString ();
+		}
 	}
 }
+
+//public class ScoreText : Text {
+//	private int val = 0;
+//	public int ScoreGet() {
+//		return val;
+//	}
+//
+//	public void ScoreAdd(int score) {
+//		val += score;
+//		ScoreShow ();
+//	}
+//
+//	private void ScoreShow() {
+//		text = "Score:" + Environment.NewLine + val.ToString ();
+//	}
+//
+//	public void ScoreReset() {
+//		val = 0;
+//		ScoreShow ();
+//	}
+//}

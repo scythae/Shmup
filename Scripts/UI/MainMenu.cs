@@ -7,6 +7,13 @@ public class MainMenu {
 	private static SelectableTextList instance;
 	private static Dictionary<string, UnityAction> menuItems = new Dictionary<string, UnityAction> ();
 
+	public const string itemCaption_NewGame = "New game";
+	public const string itemCaption_ExitGame = "Exit";
+	public const string itemCaption_ResumeGame = "Resume";
+
+	public static string[] defaultMenuSet = new string[] {itemCaption_NewGame, itemCaption_ExitGame};
+	public static string[] pausedMenuSet = new string[] {itemCaption_ResumeGame, itemCaption_NewGame, itemCaption_ExitGame};
+
 	public static void ShowAfterDelay (string[] menuItemsCaptions, float delay) {
 		Show (menuItemsCaptions, delay);
 	}
