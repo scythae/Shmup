@@ -6,7 +6,7 @@ public class Enemy : Ship {
 		Speed = 5; 
 		hitPoints = 1;
 		unitSide = UnitSide.usEnemy;
-		DamageSource.AddToGameObject (this.gameObject, this.hitPoints, UnitSide.usPlayer);
+		DamageSource.AddToGameObject<DS_Ship> (this.gameObject, this.hitPoints, UnitSide.usPlayer);
 		this.gameObject.AddComponent<TrajectoryLinear> ().Initialize (new Vector2(0.05f, 0), 0.05f);
 		this.gameObject.AddComponent<TrajectoryCircle> ().Initialize (new Vector2(1, 1), 2);
 	}

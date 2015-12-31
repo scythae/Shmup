@@ -2,14 +2,12 @@
 
 public class DamageSource : MonoBehaviour {
 	public float damage = 0;
-	public bool isBullet = false;
 	public UnitSide target = UnitSide.usNone;
 
-	public static DamageSource AddToGameObject(GameObject gameObject, float damage, UnitSide target, bool isBullet = false ) {
-		DamageSource result = gameObject.AddComponent<DamageSource> ();
+	public static T AddToGameObject<T>(GameObject gameObject, float damage, UnitSide target) where T : DamageSource {
+		T result = gameObject.AddComponent<T> ();
 		result.damage = damage;
 		result.target = target;
-		result.isBullet = isBullet;
 		return result;
 	}
 
@@ -20,8 +18,8 @@ public class DamageSource : MonoBehaviour {
 	}
 }
 
-public class Bullet : DamageSource {
-	void Start () {
-		isBullet = true;
-	}
+public class DS_Bullet : DamageSource {
+}
+
+public class DS_Ship : DamageSource {
 }

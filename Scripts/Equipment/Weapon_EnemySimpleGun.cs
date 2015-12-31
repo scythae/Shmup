@@ -13,6 +13,6 @@ public class Weapon_EnemySimpleGun : Weapon {
 
 	protected override void AddComponentsToBullet(GameObject bullet) {
 		base.AddComponentsToBullet (bullet);
-		DamageSource.AddToGameObject (bullet, this.damage, UnitSide.usPlayer, true);
+		DamageSource.AddToGameObject<DS_Bullet> (bullet, this.damage, UnitSide.usPlayer);
 	}
 }

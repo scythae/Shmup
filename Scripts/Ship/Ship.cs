@@ -61,7 +61,7 @@ public class Ship : PausableRepetition {
 
 		this.ReceiveDamage (damageSource.damage);
 
-		if (damageSource.isBullet) {
+		if (damageSource is DS_Bullet) {
 			Destroy (damageSource.gameObject);
 		}
 	}

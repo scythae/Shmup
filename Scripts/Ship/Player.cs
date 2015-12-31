@@ -10,7 +10,7 @@ public class Player : Ship {
 		hitPoints = 5;
 
 		unitSide = UnitSide.usPlayer;
-		DamageSource.AddToGameObject (this.gameObject, this.hitPoints, UnitSide.usEnemy);
+		DamageSource.AddToGameObject<DS_Ship> (this.gameObject, this.hitPoints, UnitSide.usEnemy);
 	}
 
 	protected override void Start () {
