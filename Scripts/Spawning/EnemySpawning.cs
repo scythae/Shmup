@@ -19,7 +19,9 @@ public class EnemySpawning : PausableRepetition {
 
 		Enemy enemy = ship.AddComponent<Enemy> ();
 		enemy.zone = shipZone;
-		ship.AddComponent<Weapon_EnemySimpleGun> ();
+		ship.AddComponent<Weapon.EnemySimpleGun> ();
+		ship.AddComponent<Weapon.Dropper> ().Drop = new GameObject[] {Prefab.invulnerability};
+
 		Rigidbody2D_ex.AddToObject (ship);
 	}
 }

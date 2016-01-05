@@ -32,7 +32,7 @@ public class Rigidbody2D_ex : MonoBehaviour {
 	public void SetPaused(bool paused) {
 		if (paused) {
 			SaveVelocity ();
-			GetRigidbody2D ().velocity = new Vector2(0, 0);
+			GetRigidbody2D ().velocity = Vector2.zero;
 		} else {
 			LoadVelocity ();
 		}

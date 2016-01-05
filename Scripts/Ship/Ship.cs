@@ -50,6 +50,10 @@ public class Ship : PausableRepetition {
 	}
 
 	protected virtual void OnTriggerEnter2D(Collider2D other) {
+		OnDamageSource (other);
+	}
+
+	void OnDamageSource(Collider2D other) {
 		DamageSource damageSource = other.gameObject.GetComponent<DamageSource> ();
 		if (damageSource == null) {
 			return;

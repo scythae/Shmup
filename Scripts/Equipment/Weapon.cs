@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+namespace Weapon {
+	
 public class Weapon : PausableRepetition {
 	protected GameObject bulletTemplate;
 
@@ -37,11 +39,11 @@ public class Weapon : PausableRepetition {
 		return this.gameObject.transform.position;
 	}
 		
-    void Shot () {
+    protected virtual void Shot () {
 		if (bulletTemplate == null) {
 			return;
 		}
-			
+
 		GameObject newBullet = (GameObject) Instantiate (bulletTemplate, BulletPosition(), BulletRotation());
 		newBullet.GetComponent<Rigidbody2D> ().velocity = this.gameObject.transform.up * bulletSpeed;
 		AddComponentsToBullet (newBullet);
@@ -57,4 +59,5 @@ public class Weapon : PausableRepetition {
 			weapon.Shooting = shooting;
 		}
 	}
+}
 }

@@ -16,7 +16,7 @@ public class PlayerSpawning : MonoBehaviour {
 
 		Player player = ship.AddComponent<Player> ();
 		player.zone = shipZone;
-		ship.AddComponent<Weapon_PlayerSimpleGun> (); 
+		ship.AddComponent<Weapon.PlayerSimpleGun> (); 
 		Rigidbody2D_ex.AddToObject (ship);
 	}
 }

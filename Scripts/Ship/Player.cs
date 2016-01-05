@@ -23,7 +23,7 @@ public class Player : Ship {
 
 	protected override void OnEnable ()	{
 		base.OnEnable ();
-		Weapon.TrySetShooting (this.gameObject, Input.GetButton ("Fire"));
+		Weapon.Weapon.TrySetShooting (this.gameObject, Input.GetButton ("Fire"));
 	}
 
 	protected override void Update() {	
@@ -32,10 +32,10 @@ public class Player : Ship {
 		HitPoints.Show ((int) Mathf.Round(hitPoints));
 
 		if (Input.GetButtonDown ("Fire")) {	
-			Weapon.TrySetShooting (this.gameObject, true);
+			Weapon.Weapon.TrySetShooting (this.gameObject, true);
 		}
 		if (Input.GetButtonUp ("Fire")) {			
-			Weapon.TrySetShooting (this.gameObject, false);
+			Weapon.Weapon.TrySetShooting (this.gameObject, false);
 		}
 
 		if (Input.GetButtonDown ("Accelerate")) {
@@ -59,6 +59,20 @@ public class Player : Ship {
 	public override void Kill () {
 		base.Kill();
 		Design.gameController.GameOver ();
+	}
+
+	protected override void OnTriggerEnter2D(Collider2D other) {
+		base.OnTriggerEnter2D (other);
+		OnBonus (other);
+	}
+
+	void OnBonus(Collider2D other) {
+		Bonus bonus = other.gameObject.GetComponent<Bonus> ();
+		if (bonus == null) {
+			return;
+		}
+
+		bonus.OnInteract (this.gameObject);
 	}
 }
 

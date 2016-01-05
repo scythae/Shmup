@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-public class Weapon_PlayerSimpleGun : Weapon {
+namespace Weapon {
+	
+	public class PlayerSimpleGun : Weapon {
 	protected override void Start () {
 		base.Start ();
-		bulletTemplate =  (GameObject) Resources.Load("pf_PlayerBullet");
+		bulletTemplate = Prefab.playerBullet;
 		bulletSpeed = 15;
 		reloadTime = 0.25f;
 		damage = 1;
@@ -14,4 +15,6 @@ public class Weapon_PlayerSimpleGun : Weapon {
 		base.AddComponentsToBullet (bullet);
 		DamageSource.AddToGameObject<DS_Bullet> (bullet, this.damage, UnitSide.usEnemy);
 	}
+}
+
 }
