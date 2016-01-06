@@ -4,17 +4,15 @@ using System.Collections;
 public class Player : Ship {
 	private float PlayerAcceleration;
 
-	public Player () : base () {
+	protected override void Start () {
+		base.Start ();
+		this.gameObject.AddComponent<BuffHatter> ();
+		DamageSource.AddToGameObject<DS_Ship> (this.gameObject, this.hitPoints, UnitSide.usEnemy);
+
 		Speed = 5;
 		PlayerAcceleration = 2;
 		hitPoints = 5;
-
 		unitSide = UnitSide.usPlayer;
-		DamageSource.AddToGameObject<DS_Ship> (this.gameObject, this.hitPoints, UnitSide.usEnemy);
-	}
-
-	protected override void Start () {
-		base.Start ();
 	}
 
 	protected override void ReceiveDamage(float damage) {
@@ -68,11 +66,10 @@ public class Player : Ship {
 
 	void OnBonus(Collider2D other) {
 		Bonus bonus = other.gameObject.GetComponent<Bonus> ();
-		if (bonus == null) {
+		if (bonus == null) 
 			return;
-		}
 
-		bonus.OnInteract (this.gameObject);
+		bonus.Interact (this.gameObject);
 	}
 }
 

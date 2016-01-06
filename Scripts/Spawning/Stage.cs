@@ -46,7 +46,7 @@ public class Stage : MonoBehaviour {
 
 	void OnDestroy () {
 		Destroy (instance.gameObject);
-		DamageSource.DestroyAllMaintainedGameobjects ();
+		StageInhabitant.DestroyAll ();
 	}
 
 	void Update () {
@@ -57,7 +57,7 @@ public class Stage : MonoBehaviour {
 
 	void SetPaused (bool paused) {
 		fPaused = paused;
-
+		
 		Rigidbody2D_ex.SetAllPaused (fPaused);
 		PausableRepetition.SetAllPaused (fPaused);
 

@@ -3,10 +3,8 @@
 public class Rigidbody2D_ex : MonoBehaviour {
 	private Vector2 savedVelocity;
 
-	public static Rigidbody2D_ex AddToObject(GameObject gameObject) {
-		Rigidbody2D_ex result = gameObject.AddComponent<Rigidbody2D_ex> ();
-		result.SaveVelocity (); //optimization
-		return result;
+	void Start () {
+		SaveVelocity (); // delete this string if need optimization
 	}
 
 	private Rigidbody2D GetRigidbody2D () {

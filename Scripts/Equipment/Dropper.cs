@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Weapon {
 	public class Dropper : Weapon{
-		public GameObject[] Drop;
+		public GameObject[] content;
 
 		protected override void Start () {
 			base.Start ();
@@ -12,8 +12,8 @@ namespace Weapon {
 			Shooting = false;
 		}
 
-		void OnDestroy () {		
-			foreach (GameObject bonusTemplate in Drop) {
+		public void Drop () {		
+			foreach (GameObject bonusTemplate in content) {
 				Bonus bonus = bonusTemplate.GetComponent<Bonus> ();
 				if (bonus == null)
 					continue;

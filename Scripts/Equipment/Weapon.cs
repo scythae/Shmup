@@ -50,7 +50,8 @@ public class Weapon : PausableRepetition {
 	}
 
 	protected virtual void AddComponentsToBullet(GameObject bullet) {
-		Rigidbody2D_ex.AddToObject (bullet);
+		bullet.AddComponent<Rigidbody2D_ex> ();
+		bullet.AddComponent<StageInhabitant> ();
 	}
 
 	public static void TrySetShooting(GameObject gameObject, bool shooting) {

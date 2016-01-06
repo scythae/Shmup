@@ -1,12 +1,7 @@
 ﻿using UnityEngine;
 
 public class Bonus: MonoBehaviour {
-	protected const float unlimitedDuration = 0;
-	protected const float zeroDropChance = 0;
-	protected Ship interactedShip = null;
-
-	public float duration = unlimitedDuration;
-	public float dropChance = zeroDropChance;
+	public float dropChance = 0;
 	public GameObject prefab = null;
 
 	public static T AddToGameObject<T>(GameObject gameObject) where T : Bonus {
@@ -14,36 +9,17 @@ public class Bonus: MonoBehaviour {
 		return bonus;
 	}
 
-	public virtual bool OnInteract(GameObject interactor) {
-		interactedShip = interactor.GetComponent<Ship> ();
-		if (interactedShip == null) {
-			return false;
-		}
-
-		DestroyUnwantedComponents ();
-
-		if (duration != unlimitedDuration) {
-			Invoke ("OnFinishDuration", duration);
-		} else {
-			Destroy (this.gameObject);
-		}
-
-		return true;
-	}
-
-	void DestroyUnwantedComponents () {
+	public virtual void Interact(GameObject interactor) {
 		DestroyComponents<Renderer> ();
 		DestroyComponents<Collider2D> ();
 		DestroyComponents<Rigidbody2D> ();
+		Destroy (this.gameObject);
 	}
+
 
 	void DestroyComponents<T> () where T : Component{
 		foreach (T component in gameObject.GetComponents<T> ()) {
 			Destroy (component);
 		}
-	}
-
-	protected virtual void OnFinishDuration() {
-		Destroy (this.gameObject);
 	}
 }
