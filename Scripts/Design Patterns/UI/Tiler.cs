@@ -30,6 +30,15 @@ public class Tiler : MonoBehaviour {
 		return result;
 	}
 		
+	protected virtual void Start () {
+	}
+
+	protected virtual void Update() {
+	}
+
+	protected virtual void FixedUpdate () {
+	}
+
 	public int itemCount {
 		get {
 			if (items == null)
@@ -39,15 +48,21 @@ public class Tiler : MonoBehaviour {
 		}
 	}		
 
-	protected List<GameObject> Items () {
-		return this.items;
-	}
-
 	public void SetItems (List<GameObject> items) {
+		if (items == null)
+			return;
+
+		DestroyChildren ();
+
 		foreach (GameObject item in items)
 			item.transform.SetParent (this.gameObject.transform, false);
 
 		this.items = items;
+	}
+
+	void DestroyChildren () {
+		if (items != null)
+			items.ForEach( delegate(GameObject item) { Destroy(item); });
 	}
 
 	public void Rebuild () {
@@ -124,6 +139,7 @@ public class Tiler : MonoBehaviour {
 	}
 
 	protected virtual void OnDestroy () {
+		DestroyChildren ();
 		Destroy (this.gameObject);
 	}
 }

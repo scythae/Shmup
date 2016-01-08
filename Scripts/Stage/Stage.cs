@@ -37,6 +37,8 @@ public class Stage : MonoBehaviour {
 		playerSpawning.onShipDeath = new UnityAction<Ship>(instance.OnPlayerDeath);
 		playerSpawning.onChangeHitPoints = new UnityAction<Ship>(instance.OnPlayerChangeHitPoints);
 
+
+
 		return instance;
 	}
 

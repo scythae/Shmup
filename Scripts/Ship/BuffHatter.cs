@@ -1,12 +1,25 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
 
 public class BuffHatter : MonoBehaviour {
+	private class BuffChangeEvent : UnityEvent<List<Buff>> {};
+	private BuffChangeEvent OnBuffListChange = new BuffChangeEvent ();
+	private BuffZone buffZone;
+
 	public List<Buff> buffs = new List<Buff> ();
 
+	void Start() {
+		buffZone = BuffZone.Create();
+		OnBuffListChange.AddListener (buffZone.OnBuffListChange);
+	}
+
 	protected void Update () {
-		buffs.RemoveAll (x => Time.time > x.startTime + x.duration);
+		int deletedCount = buffs.RemoveAll (x => Time.time > x.startTime + x.duration);
+		if (deletedCount > 0)
+			OnBuffListChange.Invoke(buffs);
 	}
 		
 	public float GetModifierValue(ShipModifierType shipModifierType) {
@@ -28,14 +41,11 @@ public class BuffHatter : MonoBehaviour {
 		if (availableBuff == null) {
 			availableBuff = buff;			
 			buffs.Add (availableBuff);
+
+			OnBuffListChange.Invoke(buffs);
 		}
 
 		availableBuff.startTime = Time.time;
-	}
-
-	public void RemoveBuff(Buff buff) {
-		buffs.Remove (buff);
-		buffs.TrimExcess ();
 	}
 
 	public static void ApplyBuff(GameObject gameobject, Buff buff) {
@@ -44,10 +54,8 @@ public class BuffHatter : MonoBehaviour {
 			buffHatter.ApplyBuff(buff);
 	}
 
-	public static void RemoveBuff(GameObject gameobject, Buff buff) {
-		BuffHatter buffHatter = gameobject.GetComponent<BuffHatter> ();
-		if (buffHatter != null)
-			buffHatter.RemoveBuff(buff);
+	void OnDestroy () {
+		Destroy (buffZone.gameObject);
 	}
 }
 

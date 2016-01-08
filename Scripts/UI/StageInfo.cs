@@ -36,7 +36,6 @@ public class StageInfo : Tiler {
 	private static LabeledInformation CreateLabeledInformation(string gameObjectName) {
 		LabeledInformation result = LabeledInformation.Create();
 		result.gameObject.name = gameObjectName;
-//		 = Vector2.zero;
 		result.rectTransform.offsetMax = result.rectTransform.offsetMin + itemSize;
 
 		return result;
