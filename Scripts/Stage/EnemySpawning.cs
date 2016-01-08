@@ -6,6 +6,8 @@ public class EnemySpawning : PausableRepetition {
 	private EnemyZone shipZone;
 	private const float respawnPeriod = 0.9f;
 
+	public UnityEngine.Events.UnityAction<Ship> onShipDeath;
+
 	protected override void Start () {
 		base.Start ();
 		repeatableAction = new UnityEngine.Events.UnityAction (Spawn);
@@ -19,6 +21,7 @@ public class EnemySpawning : PausableRepetition {
 
 		Enemy enemy = ship.AddComponent<Enemy> ();
 		enemy.zone = shipZone;
+		enemy.onDeath = onShipDeath;
 		ship.AddComponent<Weapon.EnemySimpleGun> ();
 		ship.AddComponent<Weapon.Dropper> ().content = new GameObject[] {Prefab.invulnerability};
 		ship.AddComponent<Rigidbody2D_ex> ();

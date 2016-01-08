@@ -27,8 +27,6 @@ public class Player : Ship {
 	protected override void Update() {	
 		base.Update ();
 
-		HitPoints.Show ((int) Mathf.Round(hitPoints));
-
 		if (Input.GetButtonDown ("Fire")) {	
 			Weapon.Weapon.TrySetShooting (this.gameObject, true);
 		}
@@ -56,7 +54,6 @@ public class Player : Ship {
 
 	public override void Kill () {
 		base.Kill();
-		Design.gameController.GameOver ();
 	}
 
 	protected override void OnTriggerEnter2D(Collider2D other) {

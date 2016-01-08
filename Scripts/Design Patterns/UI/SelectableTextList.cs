@@ -14,12 +14,15 @@ public class SelectableTextList : TextList {
 
 	void DistinguishSelectedItem () {	
 		int i = firstItemNumber;
-		foreach (Text text in this.gameObject.GetComponentsInChildren<Text> ()) {
-			if (i == currentItem) {
+		foreach (GameObject textItem in this.items) {
+			Text text = textItem.GetComponent<Text> ();
+			if (text == null)
+				continue;
+			
+			if (i == currentItem) 
 				DistinguishTextItem (text);
-			} else {
+ 			else 
 				NormalizeTextItem (text);
-			}
 			i++;
 		}
 	}
@@ -35,13 +38,11 @@ public class SelectableTextList : TextList {
 	protected override void Update () {
 		base.Update ();
 
-		if (NeedChangeSelection ()) {
+		if (NeedChangeSelection ())
 			ChangeSelection ();
-		}
 
-		if (NeedSubmitSelection ()) {
+		if (NeedSubmitSelection ())
 			SubmitSelection ();
-		}
 	}
 
 	bool NeedChangeSelection () {
@@ -49,12 +50,12 @@ public class SelectableTextList : TextList {
 	}
 
 	void ChangeSelection () {
-		if (Input.GetAxis ("Vertical") > 0) {
+		if (Input.GetAxis ("Vertical") > 0) 
 			currentItem--;
-		} else {
+		else
 			currentItem++;
-		}
-		currentItem = Mathf.Clamp (currentItem, firstItemNumber, ItemCount());
+
+		currentItem = Mathf.Clamp (currentItem, firstItemNumber, firstItemNumber + itemCount - 1);
 
 		DistinguishSelectedItem ();
 		Input.ResetInputAxes ();
@@ -65,12 +66,17 @@ public class SelectableTextList : TextList {
 	}
 
 	void SubmitSelection () {
-		if (OnSelectItem != null) {
+		if (OnSelectItem != null)
 			OnSelectItem (CurrentItemCaption ());
-		}
 	}
 
 	string CurrentItemCaption () {
-		return this.gameObject.transform.GetChild (currentItem - 1).gameObject.GetComponent<Text> ().text;
+		string result = "";
+
+		Text text = items[currentItem].GetComponent<Text> ();
+		if (text != null)
+			result = text.text;
+		
+		return result;
 	}
 }

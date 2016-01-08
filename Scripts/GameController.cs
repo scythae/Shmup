@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -12,6 +13,10 @@ public class GameController : MonoBehaviour {
 	private Stage stage;
 
 	void Start () {
+		Prefab.SetScale(0.5f);
+
+//		TilerTester.Test();
+
 		MainMenu.AddMenuAction (MainMenu.itemCaption_NewGame, new UnityAction (NewGame));
 		MainMenu.AddMenuAction (MainMenu.itemCaption_ExitGame, new UnityAction (ExitGame));
 		MainMenu.AddMenuAction (MainMenu.itemCaption_ResumeGame, new UnityAction (ResumeGame));
@@ -20,7 +25,6 @@ public class GameController : MonoBehaviour {
 
 	void NewGame () {
 		Stage.Destroy ();
-		Score.Reset();
 		GameWarning.Show (warningText_startGame, delay_startGame);
 		Invoke ("CreateStage", delay_startGame);
 	}

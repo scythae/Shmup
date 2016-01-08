@@ -41,4 +41,10 @@ public class Rigidbody2D_ex : MonoBehaviour {
 			rigidbody2D_ex.SetPaused (paused);
 		}
 	}
+
+	public static void SetScaledVelocity(Rigidbody2D rigidbody2D, Vector2 velocity) {
+		velocity.x *= rigidbody2D.gameObject.transform.localScale.x;
+		velocity.y *= rigidbody2D.gameObject.transform.localScale.y;
+		rigidbody2D.velocity = velocity;
+	}
 }

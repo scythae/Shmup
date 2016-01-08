@@ -20,7 +20,18 @@ public class Prefab
 	public static GameObject invulnerability = Resources.Load("pf_Invulnerability") as GameObject;
 
 	public static GameObject panel = Resources.Load("pf_Panel") as GameObject;
-	public static GameObject gameWarning = Resources.Load("pf_GameWarning") as GameObject;
 	public static GameObject textItem = Resources.Load ("pf_TextItem") as GameObject;
 	public static GameObject stageInfo = Resources.Load ("pf_StageInfo") as GameObject;
+
+
+	public static void SetScale(float scale) {
+		GameObject[] objs = {enemy, player, enemyBullet, playerBullet, invulnerability};
+
+		foreach(GameObject obj in objs) {
+			if (obj.transform == null) 
+				continue;
+			
+			obj.transform.localScale = new Vector2 (scale, scale);
+		}
+	}
 }
