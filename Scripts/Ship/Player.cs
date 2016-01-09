@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : Ship {
-	private float PlayerAcceleration;
 
 	protected override void Start () {
 		base.Start ();
@@ -10,7 +10,6 @@ public class Player : Ship {
 		DamageSource.AddToGameObject<DS_Ship> (this.gameObject, this.hitPoints, UnitSide.usEnemy);
 
 		Speed = 5;
-		PlayerAcceleration = 2;
 		hitPoints = 5;
 		unitSide = UnitSide.usPlayer;
 	}
@@ -21,25 +20,41 @@ public class Player : Ship {
 
 	protected override void OnEnable ()	{
 		base.OnEnable ();
-		Weapon.Weapon.TrySetShooting (this.gameObject, Input.GetButton ("Fire"));
+		SetShooting (Input.GetButton ("Fire"));
+		SetBuff<Buffs.Madness>(Input.GetButton ("Accelerate"));
 	}
 
 	protected override void Update() {	
 		base.Update ();
 
-		if (Input.GetButtonDown ("Fire")) {	
-			Weapon.Weapon.TrySetShooting (this.gameObject, true);
+		string ButtonName = "Fire";
+		UnityAction<bool> action = new UnityAction<bool> (SetShooting);
+		if (Input.GetButtonDown (ButtonName)) {	
+			action.Invoke(true);
 		}
-		if (Input.GetButtonUp ("Fire")) {			
-			Weapon.Weapon.TrySetShooting (this.gameObject, false);
+		if (Input.GetButtonUp (ButtonName)) {			
+			action.Invoke(false);
 		}
 
-		if (Input.GetButtonDown ("Accelerate")) {
-			Acceleration = PlayerAcceleration;	
+		ButtonName = "Accelerate";
+		action = new UnityAction<bool> (SetBuff<Buffs.Madness>);
+		if (Input.GetButtonDown (ButtonName)) {
+			action.Invoke(true);
 		} 
-		if (Input.GetButtonUp ("Accelerate")){
-			Acceleration = DefaultAcceleration;	
+		if (Input.GetButtonUp (ButtonName)){
+			action.Invoke(false);
 		}
+	}
+
+	private void SetShooting (bool state) {
+		Weapon.Weapon.TrySetShooting (this.gameObject, state);
+	}
+
+	private void SetBuff<T> (bool state) where T : Buff{
+		if (state)
+			BuffHatter.ApplyBuff<T>(this.gameObject);
+		else
+			BuffHatter.RemoveBuff<T>(this.gameObject);
 	}
 
 	protected override void FixedUpdate () {
@@ -69,5 +84,3 @@ public class Player : Ship {
 		bonus.Interact (this.gameObject);
 	}
 }
-
-

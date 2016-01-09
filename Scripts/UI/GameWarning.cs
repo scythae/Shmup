@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class GameWarning: MonoBehaviour {
 	private static Vector2 size = new Vector2(4, 1);
-
-	//public static Rect rect_CenterBig = new Rect(new Vector2 (2, 2.5f), size);
 	public static Rect rect_RightDownSmall = new Rect(new Vector2 (6, 2), new Vector2 (2, 0.25f));
 
 	public static GameWarning Show (string text, float time, Rect rect) {	
@@ -31,6 +29,10 @@ public class GameWarning: MonoBehaviour {
 	}	
 
 	static GameWarning CreateInstance () {
+		GameWarning gameWarning = FindObjectOfType<GameWarning> ();
+		if (gameWarning != null)
+			Destroy (gameWarning.gameObject);
+
 		GameObject gameWarningObject = Instantiate(Prefab.textItem);
 		gameWarningObject.transform.SetParent (Design.canvas.transform);
 

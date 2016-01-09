@@ -3,9 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Ship : PausableRepetition {
-	protected const float DefaultAcceleration = 1;
 	protected float Speed;
-	protected float Acceleration = DefaultAcceleration;
 
 	public Trajectory trajectory;
 	public Zone zone;
@@ -36,7 +34,8 @@ public class Ship : PausableRepetition {
 		if (rb2D == null)
 			return;
 
-		Rigidbody2D_ex.SetScaledVelocity(rb2D, movement * Speed * Acceleration);
+		float movementMultiplifier = Speed  * GetModifierValue (ShipModifierType.smtMoveSpeed);
+		Rigidbody2D_ex.SetScaledVelocity(rb2D, movement * movementMultiplifier);
 
 		rb2D.position = new Vector2 (
 			Mathf.Clamp (rb2D.position.x, zone.xMin, zone.xMax),
@@ -94,5 +93,3 @@ public class Ship : PausableRepetition {
 			Destroy (damageSource.gameObject);
 	}
 }
-
-

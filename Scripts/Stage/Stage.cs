@@ -67,7 +67,7 @@ public class Stage : MonoBehaviour {
 
 	void OnDestroy () {
 		StageInhabitant.DestroyAll ();
-		Destroy (instance.gameObject);	
+		Destroy (this.gameObject);	
 	}
 
 	void Update () {
