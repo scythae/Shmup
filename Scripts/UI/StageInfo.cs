@@ -1,46 +1,96 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class StageInfo : Tiler {
-	private static Vector2 itemSize = new Vector2(2, 0.75f); 
+public class StageInfo : PanelWithChildren  {
+	private static StageInfo fInstance;
+	public static StageInfo instance {
+		get { 
+			if (fInstance != null)
+				return fInstance;
+
+			fInstance = Create();
+			return fInstance;
+		}
+	}
+
+	private static Vector2 itemSize_Score = new Vector2(2, 0.75f); 
+	private static Vector2 itemSize_HitPoints = new Vector2(2, 0.75f); 
+	private static Vector2 itemSize_BuffCaption = new Vector2(2, 0.25f); 
 	private LabeledInformation LiScore;
 	private LabeledInformation LiHitPoints;	
+	private TemporaryText buffCaption;
+	private BuffZone buffZone;
 
-	public static new StageInfo Create() {
-		StageInfo result = Tiler.Create<StageInfo> (); 
-		result.SetParent(Design.canvas);
-		result.spacingRelativeToItemSize = new Vector2 (0, 0);
-		result.rectTransform.offsetMin = new Vector2(6, 0);
-		result.rectTransform.offsetMax = new Vector2(8, 6);
-		result.colCount = 1;
-		result.rowCount = 8;
 
-		List<GameObject> items = new List<GameObject> ();
+	private static new StageInfo Create() {
+		StageInfo result = PanelWithChildren.Create<StageInfo> (); 
+		result.gameObject.name = "panel_StageInfo";
 
-		result.LiScore = CreateLabeledInformation("panel_Score");
-		result.LiScore.caption = "Score";
-		items.Add(result.LiScore.gameObject);
+		RectTransform rt = result.gameObject.transform as RectTransform;
+		rt.SetParent(Design.canvas.transform);
+		rt.offsetMin = new Vector2 (6, 0);
+		rt.offsetMax = new Vector2 (8, 6);
 
-		result.LiHitPoints = CreateLabeledInformation("panel_HitPoints");
-		result.LiHitPoints.caption = "Hit Points";
-		items.Add(result.LiHitPoints.gameObject);
+		result.items = new List<GameObject> ();
 
-		result.SetItems (items);
+		result.LiScore = CreateScore(); 
+		result.items.Add (result.LiScore.gameObject);
+
+		result.LiHitPoints = CreateHitPoints(); 
+		result.items.Add (result.LiHitPoints.gameObject);
+
+		result.buffCaption = CreateBuffCaption ();
+		result.items.Add (result.buffCaption.gameObject);
+
+		result.buffZone = BuffZone.Create();
+		result.items.Add (result.buffZone.gameObject);
+
+		result.alignDirection = Aligner.AlignDirection.adTop;
+		result.SetAligner_Pivot ();
 		result.Rebuild ();
-
+	
 		return result;
 	}
 
-	private static LabeledInformation CreateLabeledInformation(string gameObjectName) {
-		LabeledInformation result = LabeledInformation.Create();
-		result.gameObject.name = gameObjectName;
-		result.rectTransform.offsetMax = result.rectTransform.offsetMin + itemSize;
-
+	private static LabeledInformation CreateScore() {
+		LabeledInformation result = LabeledInformation.Create(); 
+		result.gameObject.name = "panel_Score";
+		result.caption = "Score";
+		SetRectTransformSize(result.gameObject, itemSize_Score);
 		return result;
 	}
 
+	private static void SetRectTransformSize(GameObject gameObject, Vector2 size) {
+		RectTransform rt = gameObject.transform as RectTransform;
+		rt.offsetMax = rt.offsetMin + size;
+	}
+
+	private static LabeledInformation CreateHitPoints() {
+		LabeledInformation result = LabeledInformation.Create(); 
+		result.gameObject.name = "panel_HitPoints";
+		result.caption = "Hit Points";
+		SetRectTransformSize(result.gameObject, itemSize_HitPoints);
+		return result;
+	}
+
+	private static TemporaryText CreateBuffCaption() {
+		TemporaryText result = TemporaryText.Create ();
+		result.gameObject.name = "text_BuffCaption";
+		result.delay = 1;
+		result.text = "";
+		SetRectTransformSize(result.gameObject, itemSize_BuffCaption);
+		return result;
+	}
+
+	public List<Buff> Buffs {
+		set { buffZone.Reinitialize(value); }
+	}
+
+	public string BuffCaption {
+		get { return buffCaption.text; }
+		set { buffCaption.text = value; }
+	}
 	public int Score {
 		get { return int.Parse(LiScore.value); }
 		set { LiScore.value = value.ToString (); }

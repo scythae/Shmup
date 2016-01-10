@@ -5,21 +5,12 @@ using UnityEngine.Events;
 
 public class BuffHatter : MonoBehaviour {
 	private const float buffRecalculatePeriod = 0.1f;
-	private class BuffChangeEvent : UnityEvent<List<Buff>> {};
-	private BuffChangeEvent OnBuffListChange = new BuffChangeEvent ();
-	private BuffZone buffZone;
-
 	public List<Buff> buffs = new List<Buff> ();
-
-	void Start() {
-		buffZone = BuffZone.Create ();
-		OnBuffListChange.AddListener (buffZone.OnBuffListChange);
-	}
 
 	void Update () {
 		int deletedCount = buffs.RemoveAll (x =>  x == null);
 		if (deletedCount > 0)
-			OnBuffListChange.Invoke(buffs);
+			StageInfo.instance.Buffs = buffs;
 	}
 
 	public void ApplyBuff<T> () where T : Buff {
@@ -28,17 +19,17 @@ public class BuffHatter : MonoBehaviour {
 			buff = Buff.Create<T> ();					
 			buffs.Add (buff);
 
-			OnBuffListChange.Invoke(buffs);
+			StageInfo.instance.Buffs = buffs;
 		} else {
 			buff.Refresh ();
 		}
 
-		BuffZone.ShowBuffTitle(buff);
+		StageInfo.instance.BuffCaption = buff.caption;
 	}
 
 	public void RemoveBuff<T> () where T : Buff{
 		foreach (Buff buff in buffs.FindAll(x => x is T))
-			Destroy (buff);
+			Destroy (buff.gameObject);
 	}
 
 	public float GetModifierValue (ShipModifierType shipModifierType) {
@@ -62,10 +53,5 @@ public class BuffHatter : MonoBehaviour {
 		BuffHatter buffHatter = gameobject.GetComponent<BuffHatter> ();
 		if (buffHatter != null)
 			buffHatter.RemoveBuff<T> ();
-	}
-
-	void OnDestroy () {
-		if (buffZone != null)
-			Destroy (buffZone.gameObject);
 	}
 }

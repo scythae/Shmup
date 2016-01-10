@@ -5,28 +5,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-public class BuffZone : Tiler {
+public class BuffZone : PanelWithChildren {
 	private const string itemPrefix = "buff_";
 	private const string infinitySymbol = "\u221E";
 	private const int shortCaptionLength = 5;
 	private const int shortDurationLength = 4;
 	private static Vector2 itemSize = new Vector2(0.5f, 0.5f); 
+	private static Vector2 selfSize = new Vector2(2, 2); 
 	
 	private List<Buff> buffs;
-	public UnityAction<List<Buff>> OnBuffListChange;
-
-	public BuffZone() : base() {
-		OnBuffListChange = new UnityAction<List<Buff>>(Reinitialize);
-	}
 
 	public static new BuffZone Create() {
-		BuffZone result = Tiler.Create<BuffZone> (); 
-		result.SetParent(Design.canvas);
-		result.spacingRelativeToItemSize = new Vector2 (0, 0);
-		result.rectTransform.offsetMin = new Vector2(6, 0);
-		result.rectTransform.offsetMax = new Vector2(8, 2);
-		result.colCount = 4;
-		result.rowCount = 4;
+		BuffZone result = PanelWithChildren.Create<BuffZone> (); 
+
+		RectTransform rt = result.gameObject.transform as RectTransform;
+		rt.offsetMax = rt.offsetMin + selfSize;
+
+		result.SetAligner_FixedTile(itemSize);
+		result.alignDirection = Aligner.AlignDirection.adTop;
 
 		return result;
 	}
@@ -34,10 +30,6 @@ public class BuffZone : Tiler {
 	protected override void Update() {
 		base.Update();
 		UpdateCaptions ();
-	}
-
-	public static void ShowBuffTitle (Buff buff) {
-		GameWarning.Show(buff.caption, 2f, GameWarning.rect_RightDownSmall);
 	}
 
 	private void UpdateCaptions () {// place for optimization here
@@ -66,17 +58,16 @@ public class BuffZone : Tiler {
 		}
 	}
 
-	private void Reinitialize (List<Buff> buffs) {
+	public void Reinitialize (List<Buff> buffs) {
 		if (buffs == null)
 			return;
 
-		List<GameObject> items = new List<GameObject> ();
+		DestroyChildren ();
 
+		items = new List<GameObject> ();
 		foreach (Buff buff in buffs)
 			if (buff != null)
 				items.Add(CreateLabeledInformation(buff).gameObject);
-
-		SetItems (items);
 
 		Rebuild ();
 
@@ -86,7 +77,6 @@ public class BuffZone : Tiler {
 	private static LabeledInformation CreateLabeledInformation(Buff buff) {
 		LabeledInformation result = LabeledInformation.Create();
 		result.gameObject.name = itemPrefix + buff.caption;
-		result.rectTransform.offsetMax = result.rectTransform.offsetMin + itemSize;
 		result.caption = buff.caption.Substring(0, shortCaptionLength);
 		result.value = buff.duration.ToString();
 

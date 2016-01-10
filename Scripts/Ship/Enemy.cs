@@ -25,5 +25,3 @@ public class Enemy : Ship {
 		this.Move (movement);
 	}
 }
-
-

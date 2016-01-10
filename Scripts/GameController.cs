@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 public class GameController : MonoBehaviour {
@@ -14,9 +11,6 @@ public class GameController : MonoBehaviour {
 
 	void Start () {
 		Prefab.SetScale(0.5f);
-//		TilerTester.Test();
-//		LabeledInformationTester.Test ();
-//		PanelWithChildrenTester.Test ();
 
 		MainMenu.AddMenuAction (MainMenu.itemCaption_NewGame, new UnityAction (NewGame));
 		MainMenu.AddMenuAction (MainMenu.itemCaption_ExitGame, new UnityAction (ExitGame));
@@ -25,7 +19,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	void NewGame () {
-		Stage.Destroy ();
+		DestroyStage ();
 		GameWarning.Show (warningText_startGame, delay_startGame);
 		Invoke ("CreateStage", delay_startGame);
 	}
@@ -51,13 +45,22 @@ public class GameController : MonoBehaviour {
 		
 	void ExitGame () {		
 		Debug.Log ("ExitGame");
-		Stage.Destroy ();
+		DestroyStage ();
 		Application.Quit ();
 	}
 
 	public void GameOver() {
-		Stage.Destroy ();
+		DestroyStage ();
 		GameWarning.Show (warningText_gameOver, delay_gameOver);
 		MainMenu.ShowAfterDelay(MainMenu.defaultMenuSet, delay_gameOver);
+	}
+
+	private void DestroyStage() {
+		if (stage == null) 
+			return;
+
+		Destroy (stage);
+		if (!stage.isActiveAndEnabled) 
+			stage.OnDestroy ();
 	}
 }

@@ -55,7 +55,7 @@ public class Aligner_Tile : Aligner {
 
 		RectTransform rtp = panel.gameObject.transform as RectTransform;
 		int i = 0;
-		foreach (GameObject item in panel.items.FindAll(x => (x.transform as RectTransform) != null)) {
+		foreach (GameObject item in panel.items.FindAll(x => x.transform is RectTransform)) {
 			int rowIndex = (int) (i / colCount);
 			int colIndex = i % colCount;
 
@@ -168,7 +168,7 @@ public class Aligner_Pivot : Aligner {
 		RectTransform rtp = panel.gameObject.transform as RectTransform;
 		itemOffset = Vector2.zero;
 
-		foreach (GameObject item in panel.items.FindAll(x => (x.transform as RectTransform) != null)) {
+		foreach (GameObject item in panel.items.FindAll(x => x.transform is RectTransform)) {
 			RectTransform rt = item.transform as RectTransform;
 			rt.SetParent(rtp);			
 			rt.anchorMin = Vector2.zero;
@@ -220,6 +220,40 @@ public class PanelWithChildren : MonoBehaviour {
 	public Aligner.AlignDirection alignDirection = Aligner.AlignDirection.adBottom;
 	public bool inverted = false;
 
+	public static PanelWithChildren Create () {
+		return Create<PanelWithChildren> ();
+	}
+
+	public static T Create<T> () where T : PanelWithChildren{		
+		T result = GameObject.Instantiate(Prefab.panel).AddComponent<T> ();
+
+		RectTransform rt = result.gameObject.transform as RectTransform;
+		rt.anchorMin = Vector2.zero;
+		rt.anchorMax = Vector2.zero;
+		rt.offsetMin = new Vector2 (1, 1);
+		rt.offsetMax = rt.offsetMin + new Vector2 (1, 2);
+
+		return result;
+	}
+
+	protected virtual void Start () {		
+	}
+
+	protected virtual void Update() {
+	}
+
+	protected virtual void FixedUpdate () {
+	}
+
+	public int itemCount {
+		get {
+			if (items == null)
+				return 0;
+			else
+				return items.Count; 
+		}
+	}	
+
 	public void SetAligner_FixedTile (Vector2 tileSize) {
 		Aligner_FixedTile aligner = new Aligner_FixedTile();
 
@@ -246,40 +280,16 @@ public class PanelWithChildren : MonoBehaviour {
 		this.aligner = aligner;
 	}
 
-	public static PanelWithChildren Create () {
-		return Create<PanelWithChildren> ();
-	}
-
-	public static T Create<T> () where T : PanelWithChildren{		
-		T result = GameObject.Instantiate(Prefab.panel).AddComponent<T> ();
-
-		RectTransform rt = result.gameObject.transform as RectTransform;
-		rt.SetParent(Design.canvas.transform);
-
-		rt.anchorMin = Vector2.zero;
-		rt.anchorMax = Vector2.zero;
-		rt.offsetMin = new Vector2 (1, 1);
-		rt.offsetMax = rt.offsetMin + new Vector2 (1, 2);
-
-		return result;
-	}
-
-	protected virtual void Start () {		
-	}
-
-	protected virtual void Update() {
-	}
-
-	protected virtual void FixedUpdate () {
-	}
-
 	public void Rebuild () {
-		RebuildChildren ();
+		if (items != null)
+			items.RemoveAll (x => x== null);
 
 		if (aligner != null)
 			aligner.Rebuild ();
-	}
 
+		RebuildChildren ();
+	}
+		
 	private void RebuildChildren () {
 		if (items != null)
 			foreach (GameObject childItem in items)
@@ -287,64 +297,36 @@ public class PanelWithChildren : MonoBehaviour {
 					childPanel.Rebuild ();
 	}
 
+	public void ResizeAccordingToChildren () {
+		if (items == null)
+			return;
+
+		List<GameObject> rtObjs = items.FindAll(x => x.transform is RectTransform);
+		RectTransform rtc = rtObjs.Find(x => true).transform as RectTransform;
+		Vector2 offsetMin = rtc.offsetMin;
+		Vector2 offsetMax = rtc.offsetMax;
+
+		foreach (GameObject childItem in rtObjs) {
+			rtc = childItem.transform as RectTransform;
+			offsetMin.x = Mathf.Min(offsetMin.x, rtc.offsetMin.x);
+			offsetMin.y = Mathf.Min(offsetMin.y, rtc.offsetMin.y);
+			offsetMax.x = Mathf.Min(offsetMax.x, rtc.offsetMax.x);
+			offsetMax.y = Mathf.Min(offsetMax.y, rtc.offsetMax.y);
+		}
+
+		RectTransform rt = this.gameObject.transform as RectTransform;
+		rt.offsetMin = offsetMin;
+		rt.offsetMax = offsetMax;
+	}
+
+
 	protected virtual void OnDestroy () {
 		DestroyChildren ();
 		Destroy (this.gameObject);
 	}
 
-	private void DestroyChildren () {
+	public void DestroyChildren () {
 		if (items != null)
 			items.ForEach( delegate(GameObject item) { Destroy(item); });
-	}
-}
-
-public class PanelWithChildrenTester {
-	public class AlignIterator : MonoBehaviour {
-		private void Update () {
-			PanelWithChildren panel = gameObject.GetComponent<PanelWithChildren> ();
-
-			if (Input.GetMouseButtonDown(0)) {
-				panel.alignDirection = (Aligner.AlignDirection) ((int)(panel.alignDirection + 1) % System.Enum.GetNames(typeof(Aligner.AlignDirection)).Length);
-				Debug.Log (panel.alignDirection);
-				panel.Rebuild ();
-			}
-
-			if (Input.GetMouseButtonDown(1)) {
-				panel.inverted  = !panel.inverted;
-				Debug.Log (panel.inverted);
-				panel.Rebuild ();
-			}
-
-			if (Input.GetMouseButtonDown(2)) {
-				RectTransform rt = this.gameObject.transform as RectTransform;
-				Debug.Log (panel.inverted);
-				rt.offsetMax *= 1.1f;
-				panel.Rebuild ();
-			}
-		}
-	}
-
-	static GameObject CreateChild() {
-		GameObject obj = GameObject.Instantiate(Prefab.panel);
-		RectTransform rt = obj.transform as RectTransform;
-		rt.offsetMin = Vector2.zero;
-		rt.offsetMax = rt.offsetMin + new Vector2 (Random.Range(0.05f, 0.5f), Random.Range(0.05f, 0.5f));
-
-		return obj; 
-	}
-
-	public static void Test () {
-		PanelWithChildren panel = PanelWithChildren.Create();
-		panel.gameObject.AddComponent<AlignIterator> ();
-
-
-		panel.items = new List<GameObject> ();
-		for (int i = 0; i < 10; i++) 
-			panel.items.Add(CreateChild());
-
-		panel.SetAligner_AdaptiveTile(5, 3);
-//		panel.SetAligner_FixedTile(Vector2.zero /*new Vector2(0.5f, 0.75f)*/);
-//		panel.SetAligner_Pivot();
-		panel.Rebuild();
 	}
 }

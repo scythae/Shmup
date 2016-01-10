@@ -1,47 +1,26 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
-public class GameWarning: MonoBehaviour {
+public class GameWarning: TemporaryText {
 	private static Vector2 size = new Vector2(4, 1);
-	public static Rect rect_RightDownSmall = new Rect(new Vector2 (6, 4.25f), new Vector2 (2, 0.25f));
+	private static GameWarning fInstance;
 
-	public static GameWarning Show (string text, float time, Rect rect) {	
-		GameWarning instance = Show(text, time);
+	public static void Show (string text, float time) {	
+		if (fInstance == null)
+			fInstance = Create ();
 
-		RectTransform rt = instance.transform as RectTransform;
-		rt.offsetMin = rect.min;
-		rt.offsetMax = rect.max;
-
-		return instance;
+		fInstance.delay = time;
+		fInstance.text = text;
 	}
 
-	public static GameWarning Show (string text, float time) {	
-		GameWarning instance = CreateInstance ();
-		instance.gameObject.GetComponent <Text> ().text = text; 
-		instance.Invoke ("Hide", time);
+	private static new GameWarning Create() {
+		GameWarning result = TemporaryText.Create<GameWarning> ();
+		result.gameObject.transform.SetParent(Design.canvas.transform);
 
-		return instance;
-	}
-
-	private void Hide () {
-		Destroy (this.gameObject);
-	}	
-
-	static GameWarning CreateInstance () {
-		GameWarning gameWarning = FindObjectOfType<GameWarning> ();
-		if (gameWarning != null)
-			Destroy (gameWarning.gameObject);
-
-		GameObject gameWarningObject = Instantiate(Prefab.textItem);
-		gameWarningObject.transform.SetParent (Design.canvas.transform);
-
-		RectTransform rt = gameWarningObject.transform as RectTransform;
-		RectTransform rtp = gameWarningObject.transform.parent as RectTransform;
-
+		RectTransform rt = result.gameObject.transform as RectTransform;
+		RectTransform rtp = result.gameObject.transform.parent as RectTransform;
 		rt.offsetMin = (rtp.offsetMax - rtp.offsetMin - size) / 2;
 		rt.offsetMax = rt.offsetMin + size;
 
-		return gameWarningObject.AddComponent <GameWarning> ();
+		return result;
 	}
 }

@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
 using System.Collections.Generic;
 
-public class TextList : Tiler {
+public class TextList : PanelWithChildren {
 	protected const int firstItemNumber = 0;
 	public float DelayBeforeShowing = 0;
 
@@ -18,17 +17,12 @@ public class TextList : Tiler {
 	}
 
 	protected void SetItems (string[] captions) {
-		List<GameObject> items = new List<GameObject> ();
+		items = new List<GameObject> ();
 
 		foreach (string caption in captions) {
 			items.Add(Instantiate (Prefab.textItem));
 			items.FindLast(x => true).GetComponent<Text> ().text = caption;
 		}
-
-		base.SetItems(items);
-
-		this.colCount = 1;
-		this.rowCount = items.Count;
 	}
 		
 	protected void MakeActive() {	

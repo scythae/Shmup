@@ -6,13 +6,6 @@ using UnityEngine.Events;
 public class Stage : MonoBehaviour {
 	public UnityAction<bool> OnPause;
 
-	private static Stage instance;
-
-	private StageInfo stageInfo;
-	public StageInfo info {
-		get {return this.stageInfo; }
-	}
-
 	private bool fPaused = false;
 	public bool Paused {
 		get { return fPaused; }
@@ -20,28 +13,23 @@ public class Stage : MonoBehaviour {
 	}
 
 	public static Stage Create () {
-		if (instance != null) {
-			return instance;
-		}			
+		Stage result = null;
 
-		StageInfo stageInfo = StageInfo.Create();
-		stageInfo.Score = 0;
-		stageInfo.HitPoints = 0;
+		StageInfo.instance.Score = 0;
+		StageInfo.instance.HitPoints = 0;
+		result = StageInfo.instance.gameObject.AddComponent<Stage> (); 
 
-		instance = stageInfo.gameObject.AddComponent<Stage> ();
-		instance.stageInfo = stageInfo;
+		EnemySpawning enemySpawning = result.gameObject.AddComponent <EnemySpawning> ();
+		enemySpawning.onShipDeath = new UnityAction<Ship>(result.OnEnemyDeath);
+		PlayerSpawning playerSpawning = result.gameObject.AddComponent <PlayerSpawning> ();
+		playerSpawning.onShipDeath = new UnityAction<Ship>(result.OnPlayerDeath);
+		playerSpawning.onChangeHitPoints = new UnityAction<Ship>(result.OnPlayerChangeHitPoints);
 
-		EnemySpawning enemySpawning = stageInfo.gameObject.AddComponent <EnemySpawning> ();
-		enemySpawning.onShipDeath = new UnityAction<Ship>(instance.OnEnemyDeath);
-		PlayerSpawning playerSpawning = stageInfo.gameObject.AddComponent <PlayerSpawning> ();
-		playerSpawning.onShipDeath = new UnityAction<Ship>(instance.OnPlayerDeath);
-		playerSpawning.onChangeHitPoints = new UnityAction<Ship>(instance.OnPlayerChangeHitPoints);
-
-		return instance;
+		return result;
 	}
 
 	private void OnEnemyDeath (Ship ship) {
-		stageInfo.Score += 100;
+		StageInfo.instance.Score += 100;
 	}
 
 	private void OnPlayerDeath (Ship ship) {
@@ -49,32 +37,21 @@ public class Stage : MonoBehaviour {
 	}
 
 	private void OnPlayerChangeHitPoints (Ship ship) {
-		stageInfo.HitPoints = (int) Mathf.Round(ship.hitPoints);
+		StageInfo.instance.HitPoints = (int) Mathf.Round(ship.hitPoints);
 	}
 
-	public static void Destroy () {
-		if (instance == null) {
-			return;
-		}
-
-		if (!instance.isActiveAndEnabled) {
-			instance.OnDestroy ();
-		}
-		Destroy (instance);
-	}
-
-	void OnDestroy () {
+	public void OnDestroy () {
 		StageInhabitant.DestroyAll ();
 		Destroy (this.gameObject);	
 	}
 
-	void Update () {
+	private void Update () {
 		if (Input.GetButtonDown("Cancel")) {	
 			SetPaused (!fPaused);
 		}
 	}
 
-	void SetPaused (bool paused) {
+	private void SetPaused (bool paused) {
 		fPaused = paused;
 		
 		Rigidbody2D_ex.SetAllPaused (fPaused);
