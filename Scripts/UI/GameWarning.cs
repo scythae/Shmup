@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class GameWarning: MonoBehaviour {
 	private static Vector2 size = new Vector2(4, 1);
-	public static Rect rect_RightDownSmall = new Rect(new Vector2 (6, 2), new Vector2 (2, 0.25f));
+	public static Rect rect_RightDownSmall = new Rect(new Vector2 (6, 4.25f), new Vector2 (2, 0.25f));
 
 	public static GameWarning Show (string text, float time, Rect rect) {	
 		GameWarning instance = Show(text, time);

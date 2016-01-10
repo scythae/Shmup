@@ -28,11 +28,12 @@ public class BuffHatter : MonoBehaviour {
 			buff = Buff.Create<T> ();					
 			buffs.Add (buff);
 
-			BuffZone.ShowBuffTitle(buff);
 			OnBuffListChange.Invoke(buffs);
 		} else {
 			buff.Refresh ();
 		}
+
+		BuffZone.ShowBuffTitle(buff);
 	}
 
 	public void RemoveBuff<T> () where T : Buff{

@@ -15,7 +15,7 @@ public class StageInfo : Tiler {
 		result.rectTransform.offsetMin = new Vector2(6, 0);
 		result.rectTransform.offsetMax = new Vector2(8, 6);
 		result.colCount = 1;
-		result.rowCount = 5;
+		result.rowCount = 8;
 
 		List<GameObject> items = new List<GameObject> ();
 

@@ -149,9 +149,9 @@ public static class TilerTester {
 		LabeledInformation lab = LabeledInformation.Create();
 		lab.caption = "Health";
 		lab.value = "50";
-		lab.rectTransform.offsetMin = new Vector2 (0, 0);
-		lab.rectTransform.offsetMax = new Vector2 (1, 1);
-
+//		lab.rectTransform.offsetMin = new Vector2 (0, 0);
+//		lab.rectTransform.offsetMax = new Vector2 (1, 1);
+//
 		return lab.gameObject;
 	}
 

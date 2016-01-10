@@ -15,6 +15,8 @@ public class GameController : MonoBehaviour {
 	void Start () {
 		Prefab.SetScale(0.5f);
 //		TilerTester.Test();
+//		LabeledInformationTester.Test ();
+//		PanelWithChildrenTester.Test ();
 
 		MainMenu.AddMenuAction (MainMenu.itemCaption_NewGame, new UnityAction (NewGame));
 		MainMenu.AddMenuAction (MainMenu.itemCaption_ExitGame, new UnityAction (ExitGame));
