@@ -1,8 +1,12 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+
 public class Player : Ship {
+	private delegate void SwitchAction(bool switchState);
+	private Dictionary<string, SwitchAction> buttonActions;
 
 	protected override void Start () {
 		base.Start ();
@@ -12,38 +16,44 @@ public class Player : Ship {
 		Speed = 5;
 		hitPoints = 5;
 		unitSide = UnitSide.usPlayer;
-	}
 
-	protected override void ReceiveDamage(float damage) {
-		base.ReceiveDamage (damage);
+		buttonActions = new Dictionary<string, SwitchAction> ();
+		buttonActions.Add("Fire", SetShooting);
+		buttonActions.Add("Accelerate", SetBuff<Buffs.Madness>);
+
 	}
 
 	protected override void OnEnable ()	{
 		base.OnEnable ();
-		SetShooting (Input.GetButton ("Fire"));
-		SetBuff<Buffs.Madness>(Input.GetButton ("Accelerate"));
+		ProcessButtonsOnEnable();
+	}
+
+	private void ProcessButtonsOnEnable () {
+		if (buttonActions == null)
+			return;
+
+		foreach (KeyValuePair<string, SwitchAction> buttonAction in buttonActions)
+			buttonAction.Value(Input.GetButton(buttonAction.Key));
 	}
 
 	protected override void Update() {	
 		base.Update ();
+		ProcessButtons();
+	}
 
-		string ButtonName = "Fire";
-		UnityAction<bool> action = new UnityAction<bool> (SetShooting);
-		if (Input.GetButtonDown (ButtonName)) {	
-			action.Invoke(true);
-		}
-		if (Input.GetButtonUp (ButtonName)) {			
-			action.Invoke(false);
-		}
+	private void ProcessButtons () {
+		if (buttonActions == null)
+			return;
 
-		ButtonName = "Accelerate";
-		action = new UnityAction<bool> (SetBuff<Buffs.Madness>);
-		if (Input.GetButtonDown (ButtonName)) {
-			action.Invoke(true);
-		} 
-		if (Input.GetButtonUp (ButtonName)){
-			action.Invoke(false);
-		}
+		foreach (KeyValuePair<string, SwitchAction> buttonAction in buttonActions)
+			ExecuteButtonAction(buttonAction.Key, buttonAction.Value);
+	}
+
+	private void ExecuteButtonAction (string ButtonName, SwitchAction action) {
+		if (Input.GetButtonDown (ButtonName))
+			action(true);
+		if (Input.GetButtonUp (ButtonName))
+			action(false);
 	}
 
 	private void SetShooting (bool state) {
@@ -65,10 +75,6 @@ public class Player : Ship {
 		movement.y += Input.GetAxis ("Vertical");
 
 		this.Move (movement);
-	}
-
-	public override void Kill () {
-		base.Kill();
 	}
 
 	protected override void OnTriggerEnter2D(Collider2D other) {

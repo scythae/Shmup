@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class Design
 {
-	public static GameObject background = GameObject.Find("Background");
+	public static GameObject landscape = GameObject.Find("Landscape");
 	public static GameObject battlefield = GameObject.Find("Battlefield");
 
 	public static GameObject canvas = GameObject.Find("Canvas");

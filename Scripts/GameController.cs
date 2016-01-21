@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour {
 	private Stage stage;
 
 	void Start () {
-		Prefab.SetScale(0.5f);
+		Prefab.SetScale(1f);
 
 		MainMenu.AddMenuAction (MainMenu.itemCaption_NewGame, new UnityAction (NewGame));
 		MainMenu.AddMenuAction (MainMenu.itemCaption_ExitGame, new UnityAction (ExitGame));

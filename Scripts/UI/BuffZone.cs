@@ -50,11 +50,8 @@ public class BuffZone : PanelWithChildren {
 
 			if (buff.duration == Buff.unlimitedDuration) 
 				Li.value = infinitySymbol;
-			else {
-				string timeLeft = buff.timeLeft.ToString();
-				timeLeft = timeLeft.Substring(0, Mathf.Min(shortDurationLength, timeLeft.Length));
-				Li.value = timeLeft;
-			}
+			else				
+				Li.value = string.Format("{0:F2}", buff.timeLeft);
 		}
 	}
 

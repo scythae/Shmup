@@ -19,7 +19,7 @@ public class Buff : PausableRepetition {
 
 	private float fTimeLeft = 0;
 	public float timeLeft {	
-		get { return fTimeLeft; }
+		get { return Mathf.Max(0, fTimeLeft); }
 	}
 
 	public static T Create<T> () where T : Buff {
@@ -52,7 +52,7 @@ public class Buff : PausableRepetition {
 	protected override void FixedUpdate () {
 		base.FixedUpdate ();
 
-		if (timeLeft < 0)
+		if (fTimeLeft < 0)
 			Destroy (this.gameObject);
 	}
 }
