@@ -3,6 +3,9 @@ using System.Collections;
 
 namespace Weapon {
 	public class Dropper : Weapon{
+		private float minBonusSpeed = -2;
+		private float maxBonusSpeed = -3;
+
 		public GameObject[] content;
 
 		protected override void Start () {
@@ -20,7 +23,7 @@ namespace Weapon {
 
 				if (Random.value < bonus.dropChance) {
 					bulletTemplate = bonusTemplate;
-					bulletSpeed = Random.Range(-5, -10);
+					bulletSpeed = Random.Range(minBonusSpeed, maxBonusSpeed);
 					Shot ();
 				}
 			}

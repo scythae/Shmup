@@ -19,6 +19,8 @@ public class Prefab
 	public static GameObject playerBullet = Resources.Load("pf_PlayerBullet") as GameObject;
 	public static GameObject invulnerability = Resources.Load("pf_Invulnerability") as GameObject;
 
+	public static GameObject staticDecoration = Resources.Load("pf_StaticDecoration") as GameObject;
+
 	public static GameObject panel = Resources.Load("pf_Panel") as GameObject;
 	public static GameObject textItem = Resources.Load ("pf_TextItem") as GameObject;
 	public static GameObject stageInfo = Resources.Load ("pf_StageInfo") as GameObject;

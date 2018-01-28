@@ -1,7 +1,7 @@
 ﻿namespace Buffs {
 public class Madness : Buff {
 	public Madness () : base () {
-		caption = "Madness";
+		caption = "Acceleration";
 		modifiers = new Modifier[] {
 			new Modifier() {modifierType = ShipModifierType.smtMoveSpeed, value = 2},
 			new Modifier() {modifierType = ShipModifierType.smtIncomingDamage, value = 2},
