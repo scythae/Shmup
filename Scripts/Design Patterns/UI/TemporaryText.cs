@@ -2,44 +2,43 @@
 using UnityEngine.UI;
 
 public class TemporaryText : MonoBehaviour  {
-	private Text textComponent;
-	private DelayedAction clearAction;
-
-	public float delay = 0;
+	private DelayedAction delayedAction;
 
 	public static TemporaryText Create () {
-		return Create<TemporaryText> ();
+		return Create<TemporaryText>();
 	}
 
-	public static T Create<T> () where T : TemporaryText {
-		T result = Instantiate(Prefab.textItem).AddComponent<T> ();
-		result.textComponent = result.gameObject.GetComponent<Text> ();
-		result.textComponent.text = "";
+	public static T Create<T>() where T : TemporaryText {
+		T result = Instantiate(Prefab.textItem).AddComponent<T>();
+		result.Clear();
 		return result;
 	}
 
-	public string text {
-		get { return textComponent.text; }
-		set { Show (value, delay); }
+	public void SetText(string text, float lifeTime) {
+		this.gameObject.GetComponent<Text>().text = text;		
+		SetDelayedAction(lifeTime);
 	}
 
-	private void Show(string text, float lifeTime) {
-		if (textComponent == null)
+	private void SetDelayedAction(float delay) {
+		if (delay <= 0)
 			return;
+		
+		if (delayedAction != null)
+			Destroy (delayedAction);
 
-		if (clearAction != null)
-			Destroy (clearAction);
+		delayedAction = DelayedAction.Do(DoAfterDelay, delay);
+	}
 
-		textComponent.text = text;
-		if (lifeTime > 0)
-			clearAction = DelayedAction.Do(Clear, lifeTime );
+	private void DoAfterDelay() {
+		if (this != null && this.gameObject != null)
+			Clear();		
 	}
 
 	private void Clear() {
-		textComponent.text = "";
+		this.gameObject.GetComponent<Text>().text = "";		
 	}
 
 	private void OnDestroy() {
-		Destroy (this.gameObject);
+		Destroy(this.gameObject);
 	}
 }

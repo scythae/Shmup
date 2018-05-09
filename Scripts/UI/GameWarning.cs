@@ -8,8 +8,7 @@ public class GameWarning: TemporaryText {
 		if (fInstance == null)
 			fInstance = Create ();
 
-		fInstance.delay = time;
-		fInstance.text = text;
+		fInstance.SetText(text, time);
 	}
 
 	private static new GameWarning Create() {

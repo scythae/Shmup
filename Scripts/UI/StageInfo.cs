@@ -17,6 +17,7 @@ public class StageInfo : PanelWithChildren  {
 	private static Vector2 itemSize_Score = new Vector2(2, 0.75f); 
 	private static Vector2 itemSize_HitPoints = new Vector2(2, 0.75f); 
 	private static Vector2 itemSize_BuffCaption = new Vector2(2, 0.25f); 
+	private static float buffCaptionDelay = 1f;
 	private LabeledInformation LiScore;
 	private LabeledInformation LiHitPoints;	
 	private TemporaryText buffCaption;
@@ -77,8 +78,6 @@ public class StageInfo : PanelWithChildren  {
 	private static TemporaryText CreateBuffCaption() {
 		TemporaryText result = TemporaryText.Create ();
 		result.gameObject.name = "text_BuffCaption";
-		result.delay = 1;
-		result.text = "";
 		SetRectTransformSize(result.gameObject, itemSize_BuffCaption);
 		return result;
 	}
@@ -88,8 +87,7 @@ public class StageInfo : PanelWithChildren  {
 	}
 
 	public string BuffCaption {
-		get { return buffCaption.text; }
-		set { buffCaption.text = value; }
+		set { buffCaption.SetText(value, buffCaptionDelay); } 
 	}
 	public int Score {
 		get { return int.Parse(LiScore.value); }

@@ -10,11 +10,12 @@ public class GameController : MonoBehaviour {
 	private Stage stage;
 
 	void Start () {
-		Prefab.SetScale(1f);
+		Prefab.SetScale(0.5f);
 
 		MainMenu.AddMenuAction (MainMenu.itemCaption_NewGame, new UnityAction (NewGame));
 		MainMenu.AddMenuAction (MainMenu.itemCaption_ExitGame, new UnityAction (ExitGame));
 		MainMenu.AddMenuAction (MainMenu.itemCaption_ResumeGame, new UnityAction (ResumeGame));
+		MainMenu.AddMenuAction (MainMenu.itemCaption_Help, new UnityAction (ShowHelp));
 		MainMenu.Show(MainMenu.defaultMenuSet);
 	}
 
@@ -43,7 +44,7 @@ public class GameController : MonoBehaviour {
 		}
 	}
 		
-	void ExitGame () {		
+	void ExitGame () {		 
 		Debug.Log ("ExitGame");
 		DestroyStage ();
 		Application.Quit ();
@@ -51,6 +52,7 @@ public class GameController : MonoBehaviour {
 
 	public void GameOver() {
 		DestroyStage ();
+		
 		GameWarning.Show (warningText_gameOver, delay_gameOver);
 		MainMenu.ShowAfterDelay(MainMenu.defaultMenuSet, delay_gameOver);
 	}
@@ -62,5 +64,18 @@ public class GameController : MonoBehaviour {
 		Destroy (stage);
 		if (!stage.isActiveAndEnabled) 
 			stage.OnDestroy ();
+	}
+
+	void ShowHelp () {
+		ShowMessage.Show(
+			"'Arrows ← → ↑ ↓' - movement.\r\n" + 
+			"'Shift' - makes spacecraft move faster, but also suffer double damage if struck.\r\n" +
+			"Sometimes enemies drop High-Technology-Pack, which is granting invulnerability for limited time.",
+			ShowLastMenu
+		);
+	}
+
+	void ShowLastMenu () {
+		MainMenu.Show();		
 	}
 }

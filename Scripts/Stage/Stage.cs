@@ -46,19 +46,22 @@ public class Stage : MonoBehaviour {
 	}
 
 	private void Update () {
+		if (Paused)
+			return;
+			
 		if (Input.GetButtonDown("Cancel")) {	
-			SetPaused (!fPaused);
+			SetPaused (!Paused);
 		}
 	}
 
 	private void SetPaused (bool paused) {
 		fPaused = paused;
 		
-		Rigidbody2D_ex.SetAllPaused (fPaused);
-		PausableRepetition.SetAllPaused (fPaused);
+		Rigidbody2D_ex.SetAllPaused(paused);
+		PausableRepetition.SetAllPaused(paused);
 
 		if (OnPause != null) {
-			OnPause.Invoke (fPaused);
+			OnPause.Invoke (paused);
 		}
 	}
 }

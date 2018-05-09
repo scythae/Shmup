@@ -24,7 +24,7 @@ public class Prefab
 	public static GameObject panel = Resources.Load("pf_Panel") as GameObject;
 	public static GameObject textItem = Resources.Load ("pf_TextItem") as GameObject;
 	public static GameObject stageInfo = Resources.Load ("pf_StageInfo") as GameObject;
-
+	
 
 	public static void SetScale(float scale) {
 		GameObject[] objs = {enemy, player, enemyBullet, playerBullet, invulnerability};
