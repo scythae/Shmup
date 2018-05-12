@@ -36,4 +36,8 @@ public class Prefab
 			obj.transform.localScale = new Vector2 (scale, scale);
 		}
 	}
+
+	public class Animations {
+		public static AnimationClip explosion = Resources.Load("Animations/Explosion") as AnimationClip;
+	}
 }

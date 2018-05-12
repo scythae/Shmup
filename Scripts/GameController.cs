@@ -10,6 +10,8 @@ public class GameController : MonoBehaviour {
 	private Stage stage;
 
 	void Start () {
+		Destroy(GameObject.Find("DesignTimeAnimationsFactory"));
+
 		Prefab.SetScale(0.5f);
 
 		MainMenu.AddMenuAction (MainMenu.itemCaption_NewGame, new UnityAction (NewGame));

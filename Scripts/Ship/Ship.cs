@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Experimental.Director;
 using System.Collections;
 using System.Collections.Generic;
+
 
 public class Ship : PausableRepetition {
 	protected float Speed;
@@ -24,7 +26,7 @@ public class Ship : PausableRepetition {
 		this.gameObject.AddComponent<Rigidbody2D_ex> ();
 	}
 
-	protected override void FixedUpdate () {
+	protected override void FixedUpdate() {
 		base.FixedUpdate ();
 	}
 
@@ -62,34 +64,36 @@ public class Ship : PausableRepetition {
 		return result;
 	}
 
-	public virtual void Kill () {
-		TryDrop ();
+	public virtual void Kill() {
+		TryDrop();
 		if (onDeath != null)
 			onDeath(this);
 
-		Destroy (this.gameObject);		
+		Destroy(this.gameObject);		
 	}
 
 	private void TryDrop() {
-		foreach (Weapon.Dropper dropper in this.gameObject.GetComponents<Weapon.Dropper> () )
-			dropper.Drop ();
+		foreach (Weapon.Dropper dropper in this.gameObject.GetComponents<Weapon.Dropper>() )
+			dropper.Drop();
 	}
 
 	protected virtual void OnTriggerEnter2D(Collider2D other) {
-		OnDamageSource (other);
+		OnDamageSource(other);
 	}
 
 	void OnDamageSource(Collider2D other) {
-		DamageSource damageSource = other.gameObject.GetComponent<DamageSource> ();
+		DamageSource damageSource = other.gameObject.GetComponent<DamageSource>();
 		if (damageSource == null)
 			return;
 
 		if (damageSource.target != this.unitSide)
 			return;
 
-		this.ReceiveDamage (damageSource.damage);
+		this.ReceiveDamage(damageSource.damage);
 
-		if (damageSource is DS_Bullet)
-			Destroy (damageSource.gameObject);
+		if (damageSource is DS_Bullet) {
+			DisposableAnimation.Play(Prefab.Animations.explosion, damageSource.gameObject.transform);
+			Destroy(damageSource.gameObject);
+		}			
 	}
 }

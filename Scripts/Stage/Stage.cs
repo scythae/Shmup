@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
+public enum UnitSide {usNone, usPlayer, usEnemy, usBoth};
+
 public class Stage : MonoBehaviour {
 	public UnityAction<bool> OnPause;
 
