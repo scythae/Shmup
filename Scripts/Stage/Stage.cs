@@ -15,15 +15,20 @@ public class Stage : MonoBehaviour {
 	}
 
 	public static Stage Create () {
-		Stage result = null;
+		GameObject go = new GameObject("Stage");
+		StageInfo.instance.gameObject.transform.SetParent(go.transform);
 
 		StageInfo.instance.Score = 0;
 		StageInfo.instance.HitPoints = 0;
-		result = StageInfo.instance.gameObject.AddComponent<Stage> (); 
 
-		EnemySpawning enemySpawning = result.gameObject.AddComponent <EnemySpawning> ();
+		Utils.AssignTransformFromTo(Design.visibleArea.transform, go.transform);
+		Utils.ProvideCanvas(go);
+
+		Stage result = go.AddComponent<Stage>();
+
+		EnemySpawning enemySpawning = go.AddComponent<EnemySpawning>();
 		enemySpawning.onShipDeath = new UnityAction<Ship>(result.OnEnemyDeath);
-		PlayerSpawning playerSpawning = result.gameObject.AddComponent <PlayerSpawning> ();
+		PlayerSpawning playerSpawning = go.AddComponent<PlayerSpawning>();
 		playerSpawning.onShipDeath = new UnityAction<Ship>(result.OnPlayerDeath);
 		playerSpawning.onChangeHitPoints = new UnityAction<Ship>(result.OnPlayerChangeHitPoints);
 
@@ -36,6 +41,7 @@ public class Stage : MonoBehaviour {
 
 	private void OnPlayerDeath (Ship ship) {
 		Design.gameController.GameOver ();
+		PlaySound.PlayerDeath();
 	}
 
 	private void OnPlayerChangeHitPoints (Ship ship) {
@@ -43,8 +49,7 @@ public class Stage : MonoBehaviour {
 	}
 
 	public void OnDestroy () {
-		StageInhabitant.DestroyAll ();
-		Destroy (this.gameObject);	
+		Destroy(this.gameObject);	
 	}
 
 	private void Update () {

@@ -44,7 +44,9 @@ public class Weapon : PausableRepetition {
 			return;
 		}
 
-		GameObject newBullet = (GameObject) Instantiate (bulletTemplate, BulletPosition(), BulletRotation());
+		GameObject newBullet = (GameObject) Instantiate (bulletTemplate);
+		Utils.AssignTransformFromTo(this.gameObject.transform, newBullet.transform);
+
 		Rigidbody2D rb2D = newBullet.GetComponent<Rigidbody2D> ();
 		Vector2 newBulletVelocity = this.gameObject.transform.up * bulletSpeed;
 		Rigidbody2D_ex.SetScaledVelocity(rb2D, newBulletVelocity);
@@ -54,7 +56,6 @@ public class Weapon : PausableRepetition {
 
 	protected virtual void AddComponentsToBullet(GameObject bullet) {
 		bullet.AddComponent<Rigidbody2D_ex> ();
-		bullet.AddComponent<StageInhabitant> ();
 	}
 
 	public static void TrySetShooting(GameObject gameObject, bool shooting) {

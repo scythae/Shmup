@@ -21,8 +21,7 @@ public class Ship : PausableRepetition {
 	public UnityEngine.Events.UnityAction<Ship> onChangeHitPoints;
 
 	protected override void Start () {	
-		base.Start ();
-		this.gameObject.AddComponent<StageInhabitant> ();
+		base.Start();
 		this.gameObject.AddComponent<Rigidbody2D_ex> ();
 	}
 

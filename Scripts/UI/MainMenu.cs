@@ -33,8 +33,9 @@ public class MainMenu {
 		panel.DelayBeforeShowing = delay; 
 		panel.Initialize (CurrentMenuSet);
 
+		Utils.ProvideCanvas(panel.gameObject);
 		RectTransform rt = panel.gameObject.transform as RectTransform;
-		rt.SetParent(Design.canvas.transform);
+		rt.SetParent(Design.visibleArea.transform);
 		rt.offsetMin = offsetMin;
 		rt.offsetMax = rt.offsetMin + new Vector2 (itemSize.x, itemSize.y * panel.itemCount);
 

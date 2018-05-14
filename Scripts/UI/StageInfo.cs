@@ -29,7 +29,6 @@ public class StageInfo : PanelWithChildren  {
 		result.gameObject.name = "panel_StageInfo";
 
 		RectTransform rt = result.gameObject.transform as RectTransform;
-		rt.SetParent(Design.canvas.transform);
 		rt.offsetMin = new Vector2 (6, 0);
 		rt.offsetMax = new Vector2 (8, 6);
 

@@ -12,8 +12,10 @@ public class GameWarning: TemporaryText {
 	}
 
 	private static new GameWarning Create() {
-		GameWarning result = TemporaryText.Create<GameWarning> ();
-		result.gameObject.transform.SetParent(Design.canvas.transform);
+		GameWarning result = TemporaryText.Create<GameWarning>();
+		result.gameObject.transform.SetParent(Design.visibleArea.transform);
+
+		Utils.ProvideCanvas(result.gameObject);
 
 		RectTransform rt = result.gameObject.transform as RectTransform;
 		RectTransform rtp = result.gameObject.transform.parent as RectTransform;

@@ -8,22 +8,23 @@ public class EnemySpawning : PausableRepetition {
 
 	public UnityEngine.Events.UnityAction<Ship> onShipDeath;
 
-	protected override void Start () {
-		base.Start ();
+	protected override void Start() {
+		base.Start();
 		repeatableAction = new UnityEngine.Events.UnityAction (Spawn);
 		delayBetweenActionRepetitions = respawnPeriod;
-		shipZone = new EnemyZone ();
+		shipZone = new EnemyZone();
 		shipTemplate = Prefab.enemy;
 	}
 		
 	void Spawn() {	
-		GameObject ship = Instantiate (shipTemplate, shipZone.SpawnPosition(), shipTemplate.transform.rotation) as GameObject; 
+		GameObject ship = Instantiate(shipTemplate, shipZone.SpawnPosition(), shipTemplate.transform.rotation) as GameObject; 
 
-		Enemy enemy = ship.AddComponent<Enemy> ();
+		ship.transform.parent = this.gameObject.transform;
+		Enemy enemy = ship.AddComponent<Enemy>();
 		enemy.zone = shipZone;
 		enemy.onDeath = onShipDeath;
-		ship.AddComponent<Weapon.EnemySimpleGun> ();
-		ship.AddComponent<Weapon.Dropper> ().content = new GameObject[] {Prefab.invulnerability};
-		ship.AddComponent<Rigidbody2D_ex> ();
+		ship.AddComponent<Weapon.EnemySimpleGun>();
+		ship.AddComponent<Weapon.Dropper>().AddDrop(Prefab.invulnerability, 1.00f /*0.05f*/);
+		ship.AddComponent<Rigidbody2D_ex>();
 	}
 }

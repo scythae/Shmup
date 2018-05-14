@@ -32,7 +32,8 @@ public class ShowMessage : MonoBehaviour {
 
 		RectTransform rtp = panel.gameObject.transform as RectTransform;
 
-		rtp.SetParent(Design.canvas.transform);
+		Utils.ProvideCanvas(panel);
+		rtp.SetParent(Design.visibleArea.transform);
 		rtp.offsetMin = panelPosition;
 		rtp.offsetMax = panelPosition + panelSize;
 

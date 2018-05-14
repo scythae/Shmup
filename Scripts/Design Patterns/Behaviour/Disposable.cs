@@ -9,7 +9,7 @@ public class Disposable : MonoBehaviour
 	}
 
 	private void DestroySelf() {		
-		if (this.gameObject)
+		if (this && this.gameObject)
 			Destroy(this.gameObject);
 	}
 }

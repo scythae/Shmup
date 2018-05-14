@@ -10,8 +10,6 @@ public class GameController : MonoBehaviour {
 	private Stage stage;
 
 	void Start () {
-		Destroy(GameObject.Find("DesignTimeAnimationsFactory"));
-
 		Prefab.SetScale(0.5f);
 
 		MainMenu.AddMenuAction (MainMenu.itemCaption_NewGame, new UnityAction (NewGame));
@@ -47,9 +45,9 @@ public class GameController : MonoBehaviour {
 	}
 		
 	void ExitGame () {		 
-		Debug.Log ("ExitGame");
-		DestroyStage ();
-		Application.Quit ();
+		Debug.Log("ExitGame");
+		DestroyStage();
+		Application.Quit();
 	}
 
 	public void GameOver() {
