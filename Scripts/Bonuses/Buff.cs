@@ -5,8 +5,6 @@ using System.Collections.Generic;
 public enum ShipModifierType {smtMoveSpeed, smtIncomingDamage, smtOutcomingDamage};
 
 public class Buff : PausableRepetition {
-	public static GameObject rootInstance = new GameObject("Buffs");	
-
 	public class Modifier {
 		public ShipModifierType modifierType;
 		public float value;
@@ -20,15 +18,6 @@ public class Buff : PausableRepetition {
 	private float fTimeLeft = 0;
 	public float timeLeft {	
 		get { return Mathf.Max(0, fTimeLeft); }
-	}
-
-	public static T Create<T> () where T : Buff {
-		GameObject buffObject = new GameObject();
-		T result = buffObject.AddComponent<T> ();
-		buffObject.name = result.GetType().ToString();
-		buffObject.transform.SetParent(rootInstance.transform);
-
-		return result;
 	}
 
 	protected override void Start () {
@@ -53,6 +42,6 @@ public class Buff : PausableRepetition {
 		base.FixedUpdate ();
 
 		if (fTimeLeft < 0)
-			Destroy (this.gameObject);
+			Destroy (this);
 	}
 }

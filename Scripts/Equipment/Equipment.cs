@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-namespace Weapon {
 	
-public class Weapon : PausableRepetition {
+public class Equipment : PausableRepetition {
 	protected GameObject bulletTemplate;
 
 	public float bulletSpeed;
@@ -31,14 +29,6 @@ public class Weapon : PausableRepetition {
 		}
 	}
 
-	protected virtual Quaternion BulletRotation() {
-		return this.gameObject.transform.rotation;
-	}
-
-	protected virtual Vector3 BulletPosition() {
-		return this.gameObject.transform.position;
-	}
-		
     protected virtual void Shot () {
 		if (bulletTemplate == null) {
 			return;
@@ -59,10 +49,9 @@ public class Weapon : PausableRepetition {
 	}
 
 	public static void TrySetShooting(GameObject gameObject, bool shooting) {
-		Weapon weapon = gameObject.GetComponent<Weapon> ();
+		Equipment weapon = gameObject.GetComponent<Equipment> ();
 		if (weapon != null) {
 			weapon.Shooting = shooting;
 		}
 	}
-}
 }

@@ -20,10 +20,7 @@ public class PausableRepetition : Repetition {
 		get { return !enabled; }
 		set { enabled = !value; }
 	}
+}
 
-	public static void SetAllPaused (bool paused) {
-		foreach (PausableRepetition script in Object.FindObjectsOfType<PausableRepetition> ()) {
-			script.Paused = paused;
-		}
-	}
+public class Pausable: MonoBehaviour {	
 }

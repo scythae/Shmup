@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class Ship : PausableRepetition {
+public class Ship: Pausable {
 	protected float Speed;
 
 	public Trajectory trajectory;
@@ -20,13 +20,8 @@ public class Ship : PausableRepetition {
 	public UnityEngine.Events.UnityAction<Ship> onDeath;
 	public UnityEngine.Events.UnityAction<Ship> onChangeHitPoints;
 
-	protected override void Start () {	
-		base.Start();
+	protected virtual void Start () {	
 		this.gameObject.AddComponent<Rigidbody2D_ex> ();
-	}
-
-	protected override void FixedUpdate() {
-		base.FixedUpdate ();
 	}
 
 	protected void Move (Vector2 movement) {
@@ -55,7 +50,7 @@ public class Ship : PausableRepetition {
 	private float GetModifierValue(ShipModifierType shipModifierType) {
 		float result = 1;
 
-		BuffHatter buffHatter = this.gameObject.GetComponent<BuffHatter> ();
+		BuffWielder buffHatter = this.gameObject.GetComponent<BuffWielder> ();
 
 		if (buffHatter != null)
 			result = buffHatter.GetModifierValue(shipModifierType);
@@ -72,7 +67,7 @@ public class Ship : PausableRepetition {
 	}
 
 	private void TryDrop() {
-		foreach (Weapon.Dropper dropper in this.gameObject.GetComponents<Weapon.Dropper>() )
+		foreach (Dropper dropper in this.gameObject.GetComponents<Dropper>() )
 			dropper.Drop();
 	}
 
@@ -94,5 +89,14 @@ public class Ship : PausableRepetition {
 			DisposableAnimation.Play(Prefab.Animations.explosion, damageSource.gameObject.transform);
 			Destroy(damageSource.gameObject);
 		}			
+	}
+
+	public void Equip<T>() where T: Equipment{
+		this.gameObject.AddComponent<T>();
+	}
+
+	public void AddDrop(GameObject dropPrefab, float dropChance) {
+		if (Random.value < dropChance) 
+			this.gameObject.AddComponent<Dropper>().SetDrop(dropPrefab);
 	}
 }

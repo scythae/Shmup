@@ -11,7 +11,7 @@ public class Rigidbody2D_ex : MonoBehaviour {
 		return this.gameObject.GetComponent<Rigidbody2D> ();
 	}
 
-	public void SaveVelocity() {
+	private void SaveVelocity() {
 		Rigidbody2D rigidbody2D = GetRigidbody2D ();
 
 		if (rigidbody2D != null) {
@@ -19,7 +19,7 @@ public class Rigidbody2D_ex : MonoBehaviour {
 		}
 	}
 
-	public void LoadVelocity() {
+	private void LoadVelocity() {
 		Rigidbody2D rigidbody2D = GetRigidbody2D ();
 
 		if (rigidbody2D != null) {
@@ -27,7 +27,7 @@ public class Rigidbody2D_ex : MonoBehaviour {
 		}
 	}
 
-	public void SetPaused(bool paused) {
+	private void SetPaused(bool paused) {
 		if (paused) {
 			SaveVelocity ();
 			GetRigidbody2D ().velocity = Vector2.zero;
@@ -40,6 +40,14 @@ public class Rigidbody2D_ex : MonoBehaviour {
 		foreach (Rigidbody2D_ex rigidbody2D_ex in FindObjectsOfType<Rigidbody2D_ex> ()) {
 			rigidbody2D_ex.SetPaused (paused);
 		}
+	}
+
+	public static void SetPaused(Rigidbody2D rb, bool paused) {
+		Rigidbody2D_ex ex = rb.gameObject.GetComponent<Rigidbody2D_ex>();
+		if (!ex)
+			ex = rb.gameObject.AddComponent<Rigidbody2D_ex>();
+		
+		ex.SetPaused(paused);
 	}
 
 	public static void SetScaledVelocity(Rigidbody2D rigidbody2D, Vector2 velocity) {

@@ -6,6 +6,8 @@ using UnityEngine.Events;
 public enum UnitSide {usNone, usPlayer, usEnemy, usBoth};
 
 public class Stage : MonoBehaviour {
+	private const float DelayBeforeGameOver = 1.5f;
+	private const int ScoreForKillingEnemy = 100;
 	public UnityAction<bool> OnPause;
 
 	private bool fPaused = false;
@@ -36,12 +38,12 @@ public class Stage : MonoBehaviour {
 	}
 
 	private void OnEnemyDeath (Ship ship) {
-		StageInfo.instance.Score += 100;
+		StageInfo.instance.Score += ScoreForKillingEnemy;
 	}
 
-	private void OnPlayerDeath (Ship ship) {
-		Design.gameController.GameOver ();
+	private void OnPlayerDeath (Ship ship) {		
 		PlaySound.PlayerDeath();
+		DelayedAction.Do(Design.gameController.GameOver, DelayBeforeGameOver);
 	}
 
 	private void OnPlayerChangeHitPoints (Ship ship) {
@@ -63,9 +65,8 @@ public class Stage : MonoBehaviour {
 
 	private void SetPaused (bool paused) {
 		fPaused = paused;
-		
-		Rigidbody2D_ex.SetAllPaused(paused);
-		PausableRepetition.SetAllPaused(paused);
+
+		Utils.SetEnabled(this.gameObject, !paused);
 
 		if (OnPause != null) {
 			OnPause.Invoke (paused);

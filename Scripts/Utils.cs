@@ -49,4 +49,15 @@ public class Utils
 	public static void CheckObject(UnityEngine.Object obj) {
 		Debug.Log(obj.ToString());
 	}
+
+	public static void SetEnabled(GameObject go, bool enabled) {
+		foreach (PausableRepetition script in go.GetComponentsInChildren<PausableRepetition>())
+			script.enabled = enabled;
+
+		foreach (Pausable script in go.GetComponentsInChildren<Pausable>())
+			script.enabled = enabled;
+
+		foreach (Rigidbody2D rigidbody in go.GetComponentsInChildren<Rigidbody2D>())
+			Rigidbody2D_ex.SetPaused(rigidbody, !enabled);
+	}
 }

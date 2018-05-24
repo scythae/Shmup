@@ -10,7 +10,7 @@ public class Player : Ship {
 
 	protected override void Start () {
 		base.Start ();
-		this.gameObject.AddComponent<BuffHatter> ();
+		this.gameObject.AddComponent<BuffWielder> ();
 		DamageSource.AddToGameObject<DS_Ship> (this.gameObject, this.hitPoints, UnitSide.usEnemy);
 
 		Speed = 5;
@@ -23,12 +23,11 @@ public class Player : Ship {
 
 	}
 
-	protected override void OnEnable ()	{
-		base.OnEnable ();
+	protected virtual void OnEnable()	{
 		ProcessButtonsOnEnable();
 	}
 
-	private void ProcessButtonsOnEnable () {
+	private void ProcessButtonsOnEnable() {
 		if (buttonActions == null)
 			return;
 
@@ -36,12 +35,11 @@ public class Player : Ship {
 			buttonAction.Value(Input.GetButton(buttonAction.Key));
 	}
 
-	protected override void Update() {	
-		base.Update ();
+	protected virtual void Update() {	
 		ProcessButtons();
 	}
 
-	private void ProcessButtons () {
+	private void ProcessButtons() {
 		if (buttonActions == null)
 			return;
 
@@ -57,18 +55,17 @@ public class Player : Ship {
 	}
 
 	private void SetShooting (bool state) {
-		Weapon.Weapon.TrySetShooting (this.gameObject, state);
+		Equipment.TrySetShooting (this.gameObject, state);
 	}
 
 	private void SetBuff<T> (bool state) where T : Buff{
 		if (state)
-			BuffHatter.ApplyBuff<T>(this.gameObject);
+			BuffWielder.ApplyBuff<T>(this.gameObject);
 		else
-			BuffHatter.RemoveBuff<T>(this.gameObject);
+			BuffWielder.RemoveBuff<T>(this.gameObject);
 	}
 
-	protected override void FixedUpdate () {
-		base.FixedUpdate ();
+	protected void FixedUpdate () {
 		Vector2 movement = new Vector2(0, 0);
 
 		movement.x += Input.GetAxis ("Horizontal");
@@ -86,7 +83,7 @@ public class Player : Ship {
 		Bonus bonus = other.gameObject.GetComponent<Bonus> ();
 		if (bonus == null) 
 			return;
-
+		
 		bonus.Interact (this.gameObject);
 	}
 }

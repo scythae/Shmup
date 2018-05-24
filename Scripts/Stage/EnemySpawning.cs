@@ -17,14 +17,17 @@ public class EnemySpawning : PausableRepetition {
 	}
 		
 	void Spawn() {	
-		GameObject ship = Instantiate(shipTemplate, shipZone.SpawnPosition(), shipTemplate.transform.rotation) as GameObject; 
-
+		GameObject ship = Instantiate(shipTemplate, shipZone.SpawnPosition(), shipZone.SpawnRotation()) as GameObject; 
 		ship.transform.parent = this.gameObject.transform;
+
 		Enemy enemy = ship.AddComponent<Enemy>();
 		enemy.zone = shipZone;
 		enemy.onDeath = onShipDeath;
-		ship.AddComponent<Weapon.EnemySimpleGun>();
-		ship.AddComponent<Weapon.Dropper>().AddDrop(Prefab.invulnerability, 1.00f /*0.05f*/);
+		enemy.Equip<EnemySimpleGun>();
+//		enemy.Equip<Dropper<Invulnerability>>();
+		enemy.AddDrop(Prefab.invulnerability, 0.10f /*0.05f*/);
+
+
 		ship.AddComponent<Rigidbody2D_ex>();
 	}
 }

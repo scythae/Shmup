@@ -12,9 +12,7 @@ public class Enemy : Ship {
 		this.gameObject.AddComponent<TrajectoryCircle> ().Initialize (new Vector2(1, 1), 2);
 	}
 
-	protected override void FixedUpdate ()	{		
-		base.FixedUpdate ();
-
+	protected void FixedUpdate () {
 		Vector2 movement = new Vector2 (0, 0);
 
 		foreach (Trajectory trajectory in this.gameObject.GetComponents<Trajectory> ()) {
